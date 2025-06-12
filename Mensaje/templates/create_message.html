@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card card-form">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-envelope-plus"></i>
+                    Nuevo Mensaje
+                    {% if destinatario %}
+                    <span class="badge bg-info text-dark ms-2">Para: {{ destinatario.get_full_name|default:destinatario.username }}</span>
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.non_field_errors %}
+                        <i class="bi bi-exclamation-triangle-fill"></i> {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    {% if not destinatario %}
+                    <div class="mb-3">
+                        <label for="{{ form.destinatario.id_for_label }}" class="form-label">Destinatario</label>
+                        {{ form.destinatario }}
+                        {% for error in form.destinatario.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.asunto.id_for_label }}" class="form-label">Asunto</label>
+                        {{ form.asunto }}
+                        {% for error in form.asunto.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.contenido.id_for_label }}" class="form-label">Mensaje</label>
+                        {{ form.contenido }}
+                        {% for error in form.contenido.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{% url 'inbox' %}" class="btn btn-secondary me-md-2">
+                            <i class="bi bi-x-circle"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-send"></i> Enviar Mensaje
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

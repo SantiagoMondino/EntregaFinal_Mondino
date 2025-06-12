@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card card-form mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-person-badge"></i>
+                    Mi Perfil
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img src="{{ user.avatar.url|default:'/static/images/default-avatar.png' }}" 
+                             class="img-fluid rounded-circle mb-3" 
+                             alt="Avatar" width="150" height="150">
+                        <h4>{{ user.get_full_name }}</h4>
+                        <small class="text-muted">Miembro desde {{ user.date_joined|date:"d/m/Y" }}</small>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label class="form-label">Nombre de usuario</label>
+                            <input type="text" class="form-control" value="{{ user.username }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Correo electrónico</label>
+                            <input type="text" class="form-control" value="{{ user.email }}" readonly>
+                        </div>
+                        {% if user.bio %}
+                        <div class="mb-3">
+                            <label class="form-label">Biografía</label>
+                            <textarea class="form-control" rows="3" readonly>{{ user.bio }}</textarea>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                    <a href="{% url 'profile_update' %}" class="btn btn-warning me-md-2">
+                        <i class="bi bi-pencil"></i> Editar Perfil
+                    </a>
+                    <a href="{% url 'password_change' %}" class="btn btn-outline-primary">
+                        <i class="bi bi-key"></i> Cambiar Contraseña
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card card-form">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-journal-text"></i>
+                    Mis Últimos Posts
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if user_posts %}
+                <div class="list-group">
+                    {% for post in user_posts %}
+                    <a href="{% url 'post_detail' post.id %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ post.titulo }}</h5>
+                            <small>{{ post.fecha_publicacion|date:"d/m/Y" }}</small>
+                        </div>
+                        <p class="mb-1">{{ post.subtitulo }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle"></i> No has publicado ningún post aún.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

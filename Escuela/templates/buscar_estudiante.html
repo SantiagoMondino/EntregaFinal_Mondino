@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card card-form">
+            <div class="card-header bg-warning text-dark">
+                <h3 class="mb-0">
+                    <i class="bi bi-search"></i> Buscar Estudiante
+                </h3>
+            </div>
+            <div class="card-body">
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <span class="input-group-text bg-light">
+                            <i class="bi bi-card-heading"></i>
+                        </span>
+                        {{ form.matricula }}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-search"></i> Buscar
+                        </button>
+                    </div>
+                    <small class="form-text text-muted">Ingrese la matrícula completa o parcial</small>
+                </form>
+
+                {% if query %}
+                    <div class="alert alert-light border">
+                        <h5 class="mb-3">
+                            <i class="bi bi-search-heart"></i> Resultados para: "{{ query }}"
+                            <span class="badge bg-primary ms-2">{{ estudiantes|length }} encontrados</span>
+                        </h5>
+                        
+                        {% if estudiantes %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Matrícula</th>
+                                        <th>Nombre</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for estudiante in estudiantes %}
+                                    <tr>
+                                        <td>{{ estudiante.matricula }}</td>
+                                        <td>{{ estudiante.apellido }}, {{ estudiante.nombre }}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye"></i> Ver
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <i class="bi bi-exclamation-triangle"></i> No se encontraron estudiantes
+                        </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

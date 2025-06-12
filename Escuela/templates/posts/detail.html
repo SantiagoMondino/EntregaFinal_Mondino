@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.titulo }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">{{ post.titulo }}</h2>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between mb-3">
+                    <small class="text-muted">
+                        <i class="bi bi-person me-1"></i>{{ post.autor.get_full_name }}
+                    </small>
+                    <small class="text-muted">
+                        <i class="bi bi-calendar me-1"></i>{{ post.fecha_publicacion|date:"d/m/Y H:i" }}
+                    </small>
+                </div>
+                
+                {% if post.imagen %}
+                <img src="{{ post.imagen.url }}" class="img-fluid rounded mb-4" alt="{{ post.titulo }}">
+                {% endif %}
+                
+                <h4 class="text-muted mb-3">{{ post.subtitulo }}</h4>
+                
+                <div class="post-content">
+                    {{ post.contenido|safe }}
+                </div>
+                
+                <hr class="my-4">
+                
+                <div class="d-flex justify-content-between">
+                    <span class="badge bg-info">
+                        <i class="bi bi-tag me-1"></i>{{ post.get_categoria_display }}
+                    </span>
+                    
+                    {% if user == post.autor %}
+                    <div>
+                        <a href="{% url 'update_post' post.id %}" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-pencil me-1"></i>Editar
+                        </a>
+                        <a href="{% url 'delete_post' post.id %}" class="btn btn-sm btn-outline-danger">
+                            <i class="bi bi-trash me-1"></i>Eliminar
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-chat-left-text me-2"></i>Comentarios
+                </h5>
+            </div>
+            <div class="card-body">
+                {% if post.comentarios.all %}
+                <div class="list-group">
+                    {% for comentario in post.comentarios.all %}
+                    <div class="list-group-item">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ comentario.autor.get_full_name }}</strong>
+                            <small class="text-muted">{{ comentario.fecha_comentario|date:"d/m/Y H:i" }}</small>
+                        </div>
+                        <p class="mb-0 mt-2">{{ comentario.contenido }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle me-2"></i>No hay comentarios aún.
+                </div>
+                {% endif %}
+                
+                {% if user.is_authenticated %}
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_contenido" class="form-label">Agregar comentario:</label>
+                        <textarea name="contenido" class="form-control" id="id_contenido" rows="3" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="bi bi-send me-1"></i>Enviar comentario
+                    </button>
+                </form>
+                {% else %}
+                <div class="alert alert-warning mt-3">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Debes <a href="{% url 'login' %}">iniciar sesión</a> para comentar.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card card-form">
+            <div class="card-header {% if mensaje.destinatario == request.user and mensaje.es_nuevo %}bg-primary{% else %}bg-info{% endif %} text-white">
+                <h3 class="mb-0">
+                    <i class="bi bi-envelope"></i>
+                    {{ mensaje.asunto }}
+                    {% if mensaje.destinatario == request.user and mensaje.es_nuevo %}
+                    <span class="badge bg-warning text-dark ms-2">Nuevo</span>
+                    {% endif %}
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>De:</strong> {{ mensaje.remitente.get_full_name|default:mensaje.remitente.username }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Para:</strong> {{ mensaje.destinatario.get_full_name|default:mensaje.destinatario.username }}</p>
+                        </div>
+                    </div>
+                    <p><strong>Fecha:</strong> {{ mensaje.fecha_envio|date:"d/m/Y H:i" }}</p>
+                </div>
+                
+                <div class="card bg-light mb-4">
+                    <div class="card-body">
+                        {{ mensaje.contenido|linebreaks }}
+                    </div>
+                </div>
+                
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% if mensaje.remitente == request.user %}
+                    <a href="{% url 'create_message_to' mensaje.destinatario.id %}" class="btn btn-primary me-md-2">
+                        <i class="bi bi-reply"></i> Responder
+                    </a>
+                    {% else %}
+                    <a href="{% url 'create_message_to' mensaje.remitente.id %}" class="btn btn-primary me-md-2">
+                        <i class="bi bi-reply"></i> Responder
+                    </a>
+                    {% endif %}
+                    
+                    <form method="post" action="{% url 'delete_message' mensaje.id %}" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Eliminar este mensaje?');">
+                            <i class="bi bi-trash"></i> Eliminar
+                        </button>
+                    </form>
+                    
+                    <a href="{% if mensaje.destinatario == request.user %}{% url 'inbox' %}{% else %}{% url 'sent' %}{% endif %}" class="btn btn-secondary ms-md-2">
+                        <i class="bi bi-arrow-left"></i> Volver
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

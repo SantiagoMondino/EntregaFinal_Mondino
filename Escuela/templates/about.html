@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Acerca de - <Wbr>Web Escuela</Wbr>{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">
+                    <i class="bi bi-info-circle me-2"></i>Acerca de Web Escuela
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="card mb-4">
+                    <div class="row g-0">
+                        <div class="col-md-4">
+                            <img src="{{ MEDIA_URL }}about.jpg" class="img-fluid rounded-start h-100" alt="Fundador">
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <i class="bi bi-person-badge me-2"></i> Mondino Santiago
+                                </h5>
+                                <p class="card-text text-muted">
+                                    <i class="bi bi-award me-2"></i>Fundador y editor principal
+                                </p>
+                                <p class="card-text">Soy estudiante de Coderhouse y esta es parte del proyecto final.</p>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        <i class="bi bi-envelope me-2"></i>Contacto: mondininosantiago1@gmail.com
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0">
+                            <i class="bi bi-bullseye me-2"></i>Nuestra misión
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Web Escuela nació con el objetivo de crear un espacio donde educadores, estudiantes y profesionales puedan compartir conocimientos, experiencias y recursos educativos de calidad.</p>
+                        <p class="card-text">Creemos en el poder transformador de la educación y en la importancia de adaptar los métodos de enseñanza a las necesidades del siglo XXI.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
